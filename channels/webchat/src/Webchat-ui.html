@@ -1,0 +1,219 @@
+<html lang="en">
+<head>
+
+    <title>Renee - WebChat</title>
+
+    <style>
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        /* widget css starts here */
+        .widget-bot {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+        }
+
+            .widget-bot text {
+                display: block;
+                text-align: center;
+                padding: 8%;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 20px;
+                border-radius: 30px;
+                background: #3B5998;
+            }
+
+                .widget-bot text:hover {
+                    background-color: #000;
+                }
+        /* widget css ends here */
+
+
+        /* iframe container */
+        #frameContainer {
+            bottom: 0;
+            position: fixed;
+            right: 0;
+            padding-bottom: 2.5%;
+            padding-right: 3.5px;
+        }
+
+
+        /* iframe size */
+        #iReneeBot {
+            width: 100%;
+            height: 100%;
+            border: 1px black solid;
+        }
+
+        /* chat window size styles starts here */
+        .restoresize {
+            min-width: 300px;
+            width: 400px;
+            min-height: 400px;
+            height: 450px;
+        }
+
+        .maxsize {
+            width: 100%;
+            Height: 90%;
+        }
+
+        .minimize {
+            bottom: 0;
+            position: fixed;
+            min-width: 250px;
+            right: 50px !important;
+            padding-bottom: 0% !important;
+        }
+        /* chat window size styles ends here */
+
+        /* loader styles */
+        #loadergif {
+            display: block;
+            margin: 50%;
+        }
+
+        /* chat window button styles starts here */
+        .fa-style {
+            max-height: 25px;
+            float: right;
+            color: azure;
+            padding: 4px;
+            border: 1px #191438 solid;
+        }
+
+            .fa-style:hover {
+                color: gray;
+            }
+        /* chat window button styles ends here */
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+        $(function () {
+            //function to drag widget
+            $("#draggable").draggable({
+                axis: "y",
+                containment: "window"
+            });
+
+            //send message bubble styles when iframe is loaded
+            $('#iReneeBot').on('load', function () {
+                $("#loader").hide();
+                $("#reneeBotContainer").show();
+                iReneeBot.contentWindow.postMessage(JSON.stringify(ReneeWidget.styles), '*');
+            });
+
+            //handles page reload and refresh.
+            window.onbeforeunload = function (event) {
+                if (ReneeWidget.hasActiveChat === true) {
+                    iReneeBot.contentWindow.postMessage("endOfConversation", '*');
+                    setTimeout(function () { location.reload() }, 2000);
+                }
+            };
+        });
+
+        ReneeWidget = {
+
+            hasActiveChat: false,
+
+            //customizing the styles for widget
+            styles: {
+                botAvatarImage: 'https://910008webchatclient-qa.azurewebsites.net/Images/Boomer.png',
+                botAvatarInitials: 'BM',
+                userAvatarImage: 'https://910008webchatclient-qa.azurewebsites.net/Images/Visitor.jpg',
+                userAvatarInitials: 'VS',
+                bubbleBackground: 'rgba(130, 214, 155, 0.42)',
+                bubbleFromUserBackground: 'rgba(214, 197, 130, 0.42)'
+            },
+
+            //load iframe which initiate the chat
+            InitiateChat: function () {
+                $("#draggable").hide();
+                $("#frameContainer").show();
+                this.hasActiveChat = true;
+                $('#iReneeBot').attr('src', $("#iframe-src").val());
+            },
+
+            //endOfConversation message event to End the chat.
+            EndChat: function () {
+                iReneeBot.contentWindow.postMessage("endOfConversation", '*');
+                $("#frameContainer").hide();
+                $("#draggable").show();
+                this.hasActiveChat = false;
+            },
+
+            //maximize the chat window
+            MaximizeChat: function () {
+                $("#maximizeChat").hide();
+                $("#minimizeChat").show();
+                $("#restoreChat").show();
+                $("#iReneeBot").show();
+                $("#frameContainer").attr('class', 'maxsize');
+            },
+
+            //restore the chat window
+            RestoreChat: function () {
+                $("#restoreChat").hide();
+                $("#minimizeChat").show();
+                $("#maximizeChat").show();
+                $("#iReneeBot").show();
+                $("#frameContainer").attr('class', 'restoresize');
+            },
+
+            //minimize the chat window
+            MinimizeChat: function () {
+                $("#minimizeChat").hide();
+                $("#iReneeBot").hide();
+                $("#restoreChat").show();
+                $("#maximizeChat").show();
+                $("#frameContainer").attr('class', 'minimize');
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+
+     <input type="hidden" id="iframe-src" value="https://910008reneewebchat-qa.azurewebsites.net?t=11c5f444-ec19-4b6a-912f-772b2bd8171c"> 
+
+
+    <div id="draggable" style="width: 120px;" onclick="ReneeWidget.InitiateChat()" class="widget-bot">
+        <text>Renee</text>
+    </div>
+
+    <div id="frameContainer" style="display: none;" class="restoresize">
+        <div id="loader">
+            <img id="loadergif" src="loader.gif">
+        </div>
+
+        <div id="reneeBotContainer" style="display: none;">
+            <div style="background: #464775; overflow: hidden; min-height: 20px; height: 25px; width: 100%; border:1px black solid;">
+                <div style="position: absolute;font-size: larger !important;margin-left: 15px; color: whitesmoke;">Renee WebChat</div>
+                <div id="icons">
+                    <i id="endChat" class="fas fa-style fa-times" onclick="ReneeWidget.EndChat()"></i>
+                    <i id="restoreChat" style="display: none;" class="fas fa-style fa-compress" onclick="ReneeWidget.RestoreChat()"></i>
+                    <i id="maximizeChat" class="fas fa-style fa-expand" onclick="ReneeWidget.MaximizeChat()"></i>
+                    <i id="minimizeChat" class="fas fa-style fa-minus" onclick="ReneeWidget.MinimizeChat()"></i>
+                </div>
+            </div>
+            <iframe id="iReneeBot" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</body>
+</html>
