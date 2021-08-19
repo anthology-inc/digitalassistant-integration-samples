@@ -1,0 +1,8 @@
+{
+  "$kind": "Microsoft.MultiLanguageRecognizer",
+  "id": "QnA_ReneeSampleSkillBot",
+  "recognizers": {
+    "en-us": "ReneeSampleSkillBot.en-us.qna",
+    "": "ReneeSampleSkillBot.en-us.qna"
+  }
+}
