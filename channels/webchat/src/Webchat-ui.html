@@ -94,6 +94,14 @@
                 color: gray;
             }
         /* chat window button styles ends here */
+		
+		/* Border color on focus for the buttons starts here */
+		span#minimizeChat, span#maximizeChat, span#endChat, span#restoreChat:focus 
+		{
+			outline-color: #FFFF00 !important;
+		}
+		/* Border color on focus for the buttons ends here */
+		
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,6 +110,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
+        
+        //Title for Iframe can be changed here.
+		var customTitle="Renee";
 
         $(function () {
             //function to drag widget
@@ -146,6 +157,7 @@
                 $("#frameContainer").show();
                 this.hasActiveChat = true;
                 $('#iReneeBot').attr('src', $("#iframe-src").val());
+                ReneeWidget.GetIframeTitle();
             },
 
             //endOfConversation message event to End the chat.
@@ -181,6 +193,12 @@
                 $("#restoreChat").show();
                 $("#maximizeChat").show();
                 $("#frameContainer").attr('class', 'minimize');
+            },
+
+            //Get Iframe title 
+            GetIframeTitle: function () {
+                var defaultTitle = "Digital Assistant";
+                $("#iReneeBot").attr('title', defaultTitle + ' ' + customTitle);
             }
         }
 
@@ -189,10 +207,10 @@
 
 <body>
 
-     <input type="hidden" id="iframe-src" value="https://910008reneewebchat-qa.azurewebsites.net?t=11c5f444-ec19-4b6a-912f-772b2bd8171c"> 
+    <input type="hidden" id="iframe-src" value="https://reneewebchat-qa-910008.campusnexus.cloud?t=11c5f444-ec19-4b6a-912f-772b2bd8171c">
 
 
-    <div id="draggable" style="width: 120px;" onclick="ReneeWidget.InitiateChat()" class="widget-bot">
+    <div id="draggable" style="width: 120px;" onclick="ReneeWidget.InitiateChat()" class="widget-bot" tabindex="0" onkeypress="ReneeWidget.InitiateChat()">
         <text>Renee</text>
     </div>
 
@@ -205,13 +223,13 @@
             <div style="background: #464775; overflow: hidden; min-height: 20px; height: 25px; width: 100%; border:1px black solid;">
                 <div style="position: absolute;font-size: larger !important;margin-left: 15px; color: whitesmoke;">Renee WebChat</div>
                 <div id="icons">
-                    <i id="endChat" class="fas fa-style fa-times" onclick="ReneeWidget.EndChat()"></i>
-                    <i id="restoreChat" style="display: none;" class="fas fa-style fa-compress" onclick="ReneeWidget.RestoreChat()"></i>
-                    <i id="maximizeChat" class="fas fa-style fa-expand" onclick="ReneeWidget.MaximizeChat()"></i>
-                    <i id="minimizeChat" class="fas fa-style fa-minus" onclick="ReneeWidget.MinimizeChat()"></i>
+                    <span id="endChat" class="fas fa-style fa-times" onclick="ReneeWidget.EndChat()" tabindex="2" onkeypress="ReneeWidget.EndChat()" title="End Chat"></span>
+					<span id="restoreChat" style="display: none;" class="fas fa-style fa-compress" onclick="ReneeWidget.RestoreChat()" tabindex="3" onkeypress="ReneeWidget.RestoreChat()" title="Restore"></span>
+					<span id="maximizeChat" class="fas fa-style fa-expand" onclick="ReneeWidget.MaximizeChat()" tabindex="4" style="display: block;" onkeypress="ReneeWidget.MaximizeChat()" title="Maximize"></span>
+					<span id="minimizeChat" class="fas fa-style fa-minus" onclick="ReneeWidget.MinimizeChat()" tabindex="5" onkeypress="ReneeWidget.MinimizeChat()" title="Minimize" ></span>
                 </div>
             </div>
-            <iframe id="iReneeBot" frameborder="0"></iframe>
+            <iframe id="iReneeBot" frameborder="0" tabindex="1"></iframe>
         </div>
     </div>
 
