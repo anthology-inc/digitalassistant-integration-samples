@@ -1,6 +1,6 @@
 ﻿# Overview
 
-This Skill bot sample is created for testing with Renee. It uses BotFramework V4 version 4.9.2
+This Skill bot sample is recreated from microsoft sample created for testing with Renee. It uses BotFramework V4 version 4.9.2
 The skill bot supports following activity a.k.a skills
 1. BookFlight
 2. StudentInformation
@@ -28,16 +28,16 @@ To ensure that this skill bot handles request only for authrozied bot, go to app
 
 ### QnA maker setting
 Currently the code supports only one QnA maker KnowledgeBase for any one skill. If the request is to support multiple QnA for different skills, then the code can be enhanced to support it
-Go to appsettings.json and enter the following details. The below snippet is configured for 700014 subscription for Renee-Bot-Local resource group
+Go to appsettings.json and enter the following details. The below configuration describes as to how the QnA maker information need to be configured
 
 ```language
 "KnowledgeBase": {
-    "endpointKey": "4144c161-c662-4bda-88da-9363dd7258dc",
-    "hostname": "https://renee-bot-local-qnahost.azurewebsites.net/qnamaker",
-    "id": "Faq",
-    "kbId": "e0e1c98f-329b-44e5-b291-4263fd60b7fa",
-    "name": "FAQ",
-    "subscriptionKey": "7fdafdd2e7d449119d124efc0e7e2e84"
+    "endpointKey": "xxxxxxx-xxx-xxxxx-xxxx-xxxxxxxxxxx", //Value to be fetched from QnA maker website for the particular knowledgebase
+    "hostname": "https://xxxxx.xxxx.xxxx/qnamaker", // To be fetched from QnaMaker azure appservice
+    "id": "Faq", //unique identifier
+    "kbId": "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx", //Knowledgebase Id to be fetched from Qna Maker website
+    "name": "FAQ", //Knowledgebase name
+    "subscriptionKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" // To be fetched from QnaMaker azure Cognitive resource in Keys & EdnPoint section
   }
 
 ```
