@@ -1,27 +1,40 @@
-# Welcome to your new bot
+# Welcome to your new skill bot
 
-This bot project was created using the Empty Bot template, and contains a minimal set of files necessary to have a working bot.
+This bot project was created using the Empty Bot template, and contains a minimal set of files necessary to have a working Skill bot. This sample shows how to work with QnA maker knowledge base and how to work with simple skill e.g BookFlight. You can extend the sample by creating a new skill that can plug in with the QnA maker 
 
 ## Next steps
+### Install BotFramework Composer
+Download the [Botframework Composer](https://docs.microsoft.com/en-us/composer/install-composer?tabs=windows#download-composer)  from the microsoft website
 
-### Start building your bot
+Launch the botframework composer and load the solution. This will display as below
+![](LandingPage.png)
+
+The red error icon shows that QnA Configuration is not been completed
+
+### Configuration
+- Configure the azure profile and azure resource where this sample skillbot need to be published as shown below
+![](PublishToAzure.png)
+Click  Manage Profiles from the drop down and create a azure profile based your subscription. Key in the resource details based on your requirement
+![](AzureSubscriptionDetails.png) 
+Click next to create the azure resource. This page will display both the required and optional resources that need to be created in azure. By default all the optional resources are selected for deployment. For testing purpose you can unselect or select whichever resource you require to deploy.
+![](AzureResource.png)
+
+- Go to [QnA Maker](https://qnamaker.ai) to create a knowledge base. [Click on this microsoft link to get more more details](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/quickstarts/create-publish-knowledge-base?tabs=v1)
+
+- Configure the QnA maker subsciption as shown below from Configure your bot section
+![](QnaConfiguration.png) 
+
+### Working with the Sample
+The manifest file(dialogchildbot-manifest-1.0.json) is located under wwwroot\Manifest\ folder. This will be used to describe as to what skills this bot supports under the "activities" section. It describes that it supports two skill - bookFlight and CampusInformation. In this working sample, booFlight is configured to show how the Skill need to be implemented
+through botframework composer. 
+![](bookflight.png)
+
+Using similar example, the campusInformation skill can be implemented through QnA maker. As a reference, you can refer the sample that implements QnA maker intent without a skill to understand the flow
+![](qnaIntent.png) 
+
+
+### Help
 
 Composer can help guide you through getting started building your bot. From your bot settings page (the wrench icon on the left navigation rail), click on the rocket-ship icon on the top right for some quick navigation links.
 
-Another great resource if you're just getting started is the **[guided tutorial](https://docs.microsoft.com/en-us/composer/tutorial/tutorial-introduction)** in our documentation.
-
-### Connect with your users
-
-Your bot comes pre-configured to connect to our Web Chat and DirectLine channels, but there are many more places you can connect your bot to - including Microsoft Teams, Telephony, DirectLine Speech, Slack, Facebook, Outlook and more. Check out all of the places you can connect to on the bot settings page.
-
-### Publish your bot to Azure from Composer
-
-Composer can help you provision the Azure resources necessary for your bot, and publish your bot to them. To get started, create a publishing profile from your bot settings page in Composer (the wrench icon on the left navigation rail). Make sure you only provision the optional Azure resources you need!
-
-### Extend your bot with packages
-
-From Package Manager in Composer you can find useful packages to help add additional pre-built functionality you can add to your bot - everything from simple dialogs & custom actions for working with specific scenarios to custom adapters for connecting your bot to users on clients like Facebook or Slack.
-
-### Extend your bot with code
-
-You can also extend your bot with code - simply open up the folder that was generated for you in the location you chose during the creation process with your favorite IDE (like Visual Studio). You can do things like create custom actions that can be used during dialog flows, create custom middleware to pre-process (or post-process) messages, and more. See [our documentation](https://aka.ms/bf-extend-with-code) for more information.
+Another great resource if you're just getting started is the **[guided tutorial](https://docs.microsoft.com/en-us/composer/tutorial/tutorial-introduction)** in microsoft documentation.
