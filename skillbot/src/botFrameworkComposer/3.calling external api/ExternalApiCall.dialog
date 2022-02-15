@@ -1,0 +1,225 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "ExternalApiCall",
+    "description": "",
+    "id": "A79tBe"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720",
+        "comment": "This trigger runs when a conversation update activity is sent to the bot. This indicates a user or bot being added or removed from a conversation."
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item",
+            "comment": "For each member added to the conversation."
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else",
+                "comment": "Checks that that member added ID does not match the bot ID. This prevents the greeting message from being sent when the bot is added to a conversation."
+              },
+              "condition": "=string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Greeting()}"
+                }
+              ]
+            }
+          ],
+          "value": "dialog.foreach.value"
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "y0vxkd"
+          },
+          "resultProperty": "dialog.api_response",
+          "method": "GET",
+          "url": "https://crmf3.dev.campusmgmt.com:9500/ds/campusnexus/Campuses?$top=5",
+          "headers": {
+            "Content-Type": "application/json",
+            "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXX"
+          },
+          "responseType": "json",
+          "contentType": "application/json"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "xcvo8Y"
+          },
+          "activity": "${SendActivity_xcvo8Y()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "mb2n1u",
+        "comment": "This trigger fires when an incoming activity is not handled by any other trigger."
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "kMjqz1",
+            "comment": "It is recommended to show a message to the user when the bot does not know how to handle an incoming activity and provide follow up options or a help message."
+          },
+          "activity": "${SendActivity_DidNotUnderstand()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnMessageActivity",
+      "$designer": {
+        "id": "30YLdc",
+        "name": "Message received (Message received activity)"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "pxUaOz"
+          },
+          "assignments": [
+            {
+              "property": "dialog.url",
+              "value": "https://crmf3.dev.campusmgmt.com:9500/ds/campusnexus/Campuses?$filter=Name eq '${turn.activity.text}'"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "T5RU8F"
+          },
+          "resultProperty": "turn.results",
+          "method": "GET",
+          "contentType": "application/json",
+          "responseType": "json",
+          "headers": {
+            "apiKey": "c9tZIhnBgJugdL8H8YVlRJzFkXGSrY6Lk2HCYs4JVcbIjdbUC3SIpNxOJPkZo8qG",
+            "Content-type": "application/json"
+          },
+          "url": "${dialog.url}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "KKmI52"
+          },
+          "activity": "${SendActivity_KKmI52()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "ineqpW"
+          },
+          "assignments": [
+            {
+              "property": "user.campus",
+              "value": "=turn.activity.text"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "3rL7s1"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "prompt": "${ConfirmInput_Prompt_3rL7s1()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or "
+          },
+          "property": "user.confirm"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "HPfVFw"
+          },
+          "condition": "=user.confirm",
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "1NpLvQ"
+              },
+              "activity": "${SendActivity_1NpLvQ()}"
+            }
+          ],
+          "actions": [
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "71Zwuz"
+              },
+              "property": "dialog.url",
+              "value": "https://crmf3.dev.campusmgmt.com:9500/ds/campusnexus/HighSchools?$select=Name&$filter=CampusGroup/CampusList/any(p: p/Campus/Name eq '${user.campus}')"
+            },
+            {
+              "$kind": "Microsoft.HttpRequest",
+              "$designer": {
+                "id": "vsP6fr"
+              },
+              "resultProperty": "turn.results",
+              "method": "GET",
+              "url": "${dialog.url}",
+              "headers": {
+                "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                "Content-type": "application/json"
+              },
+              "responseType": "json",
+              "contentType": "application/json"
+            },
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "kdDHxU"
+              },
+              "property": "user.response",
+              "value": "=flatten(foreach(turn.results.content.value,x,x.Name), 2)"
+            },
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "FEzI5o"
+              },
+              "activity": "${SendActivity_FEzI5o()}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "ExternalApiCall.lg",
+  "id": "ExternalApiCall",
+  "recognizer": "ExternalApiCall.lu.qna"
+}
