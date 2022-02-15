@@ -1,0 +1,94 @@
+[import](common.lg)
+
+# SendActivity_Greeting()
+[Activity
+    Text = ${SendActivity_Greeting_text()}
+]
+
+# SendActivity_Greeting_text()
+- Welcome to your bot.
+
+# SendActivity_DidNotUnderstand()
+[Activity
+    Text = ${SendActivity_DidNotUnderstand_text()}
+]
+
+# SendActivity_DidNotUnderstand_text()
+- Sorry, I didn't get that.
+# SendActivity_cXoQ0u()
+[Activity
+    Text = Welcome to Company Information
+]
+
+# ChoiceInput_Prompt_IlGOiA()
+[Activity
+    Text = Please Select the Company
+]
+
+# SendActivity_gG5v0N()
+[Activity
+    Text = You have selected ${user.Company}
+]
+
+# ChoiceInput_Prompt_dmwfgr()
+[Activity
+    Text = Please select any question from below
+]
+
+# ChoiceInput_Prompt_x87ad9()
+[Activity
+    Text = Please select the question from below
+]
+
+# SendActivity_EUWzaR()
+[Activity
+    Text = - ${expandText(@answer)}
+]
+
+# SendActivity_9PUwvq()
+[Activity
+    Text = - ${expandText(@answer)}
+]
+
+# TextInput_Prompt_jSa7wm()
+[Activity
+    Text = ${expandText(@answer)}
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}
+]
+
+# TextInput_Prompt_QIx5JF()
+[Activity
+    Text = ${expandText(@answer)}
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}
+]
+
+# ConfirmInput_Prompt_YMwpXv()
+[Activity
+    Text = Do you want to ask any other Question?
+]
+
+# SendActivity_FhPZI2()
+[Activity
+    Text = Ending the Conversation
+]
+
+
+# ConfirmInput_Prompt_1eH5rH()
+[Activity
+    Text = Do you want to ask any other question?
+]
+
+# SendActivity_ussTXb()
+[Activity
+    Text = Ending this Conversation
+]
+
+# ConfirmInput_Prompt_GJwXaH()
+[Activity
+    Text = Do you want any other question related to Blackboard?
+]
+
+# SendActivity_IakoXC()
+[Activity
+    Text = Ending this Conversation
+]

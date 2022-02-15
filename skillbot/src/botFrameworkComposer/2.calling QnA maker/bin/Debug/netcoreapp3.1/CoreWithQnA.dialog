@@ -1,0 +1,674 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "CoreWithQnA",
+    "description": "",
+    "id": "A79tBe"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Greeting()}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "OTRNE8"
+          },
+          "property": "dialog.ChannelData",
+          "value": {
+            "Channel": "skillbot"
+          }
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "AI0wnu"
+          },
+          "property": "turn.Activity.ChannelData",
+          "value": "${json(dialog.ChannelData)}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "IMGzfE"
+          },
+          "activity": "${SendActivity_IMGzfE()}"
+        },
+        {
+          "$kind": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "wKd2S9"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ChoiceInput_Prompt_wKd2S9()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "style": "heroCard",
+          "property": "user.Company",
+          "choices": [
+            "Anthology",
+            "Campus Management",
+            "Talisma"
+          ],
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or "
+          }
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "4UMaRg"
+          },
+          "activity": "${SendActivity_4UMaRg()}"
+        },
+        {
+          "$kind": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "IsIKOd"
+          },
+          "condition": "user.Company",
+          "cases": [
+            {
+              "value": "Anthology",
+              "actions": [
+                {
+                  "$kind": "Microsoft.ChoiceInput",
+                  "$designer": {
+                    "id": "ZlYTf5"
+                  },
+                  "defaultLocale": "en-us",
+                  "disabled": false,
+                  "maxTurnCount": 3,
+                  "alwaysPrompt": false,
+                  "allowInterruptions": false,
+                  "prompt": "${ChoiceInput_Prompt_ZlYTf5()}",
+                  "unrecognizedPrompt": "",
+                  "invalidPrompt": "",
+                  "defaultValueResponse": "",
+                  "choiceOptions": {
+                    "includeNumbers": true,
+                    "inlineOrMore": ", or ",
+                    "inlineOr": " or "
+                  },
+                  "property": "user.AnthologyQuestions",
+                  "style": "heroCard",
+                  "choices": [
+                    "What are the different Products of Anthology",
+                    "Who is the CEO of Anthology",
+                    "Where is the Company's Head Office situated"
+                  ]
+                },
+                {
+                  "$kind": "Microsoft.IfCondition",
+                  "$designer": {
+                    "id": "KanXi8"
+                  },
+                  "condition": "Count(turn.recognized.answers[0].context.prompts) > 0",
+                  "actions": [
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "Es8uaE"
+                      },
+                      "property": "dialog.qnaContext",
+                      "value": "=turn.recognized.answers[0].context.prompts"
+                    },
+                    {
+                      "$kind": "Microsoft.TextInput",
+                      "$designer": {
+                        "id": "6UqZo7"
+                      },
+                      "disabled": false,
+                      "maxTurnCount": 3,
+                      "alwaysPrompt": false,
+                      "allowInterruptions": false,
+                      "prompt": "${TextInput_Prompt_6UqZo7()}",
+                      "unrecognizedPrompt": "",
+                      "invalidPrompt": "",
+                      "defaultValueResponse": "",
+                      "property": "turn.qnaMultiTurnResponse"
+                    },
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "4cXabY"
+                      },
+                      "property": "turn.qnaMatchFromContext",
+                      "value": "=where(dialog.qnaContext, item, item.displayText == turn.qnaMultiTurnResponse)"
+                    },
+                    {
+                      "$kind": "Microsoft.DeleteProperty",
+                      "$designer": {
+                        "id": "G9QJZD"
+                      },
+                      "property": "dialog.qnaContext"
+                    },
+                    {
+                      "$kind": "Microsoft.IfCondition",
+                      "$designer": {
+                        "id": "d4SFB6"
+                      },
+                      "condition": "turn.qnaMatchFromContext && count(turn.qnaMatchFromContext) > 0",
+                      "actions": [
+                        {
+                          "$kind": "Microsoft.SetProperty",
+                          "$designer": {
+                            "id": "RQrPDx"
+                          },
+                          "property": "turn.qnaIdFromPrompt",
+                          "value": "=turn.qnaMatchFromContext[0].qnaId"
+                        }
+                      ]
+                    }
+                  ],
+                  "elseActions": [
+                    {
+                      "$kind": "Microsoft.SendActivity",
+                      "$designer": {
+                        "id": "IADgFG"
+                      },
+                      "activity": "${SendActivity_IADgFG()}"
+                    }
+                  ]
+                },
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "dLqhwa"
+                  },
+                  "property": "dialog.ChannelData",
+                  "value": {
+                    "Channel": "skillbot"
+                  }
+                }
+              ]
+            },
+            {
+              "value": "Campus Management",
+              "actions": [
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "QJ9b0g"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "dialog.Ids",
+                  "value": "100"
+                },
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "zNWwro"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "dialog.Ids",
+                  "value": "101"
+                },
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "obt4dk"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "dialog.Ids",
+                  "value": "103"
+                },
+                {
+                  "$kind": "Microsoft.Foreach",
+                  "$designer": {
+                    "id": "8X3f99"
+                  },
+                  "index": "dialog.foreach.index",
+                  "value": "dialog.foreach.value",
+                  "actions": [
+                    {
+                      "$kind": "Microsoft.SendActivity",
+                      "$designer": {
+                        "id": "5vb4uo"
+                      },
+                      "activity": "${SendActivity_5vb4uo()}"
+                    },
+                    {
+                      "$kind": "Microsoft.ConfirmInput",
+                      "$designer": {
+                        "id": "iyl189"
+                      },
+                      "defaultLocale": "en-us",
+                      "disabled": false,
+                      "maxTurnCount": 3,
+                      "alwaysPrompt": false,
+                      "allowInterruptions": false,
+                      "prompt": "${ConfirmInput_Prompt_iyl189()}",
+                      "unrecognizedPrompt": "",
+                      "invalidPrompt": "",
+                      "choiceOptions": {
+                        "includeNumbers": true,
+                        "inlineOrMore": ", or "
+                      },
+                      "property": "user.Test"
+                    },
+                    {
+                      "$kind": "Microsoft.IfCondition",
+                      "$designer": {
+                        "id": "9g7F3L"
+                      },
+                      "condition": "user.Test",
+                      "actions": [],
+                      "elseActions": [
+                        {
+                          "$kind": "Microsoft.BreakLoop",
+                          "$designer": {
+                            "id": "H1ss18"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "itemsProperty": "dialog.Ids"
+                },
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "B0Z0hk"
+                  },
+                  "activity": "${SendActivity_B0Z0hk()}"
+                }
+              ]
+            },
+            {
+              "value": "Talisma"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "YMwpXv"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ConfirmInput_Prompt_YMwpXv()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "choiceOptions": {
+            "includeNumbers": true
+          },
+          "property": "user.Confirm"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "0ehXg4"
+          },
+          "condition": "user.Confirm",
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "FhPZI2"
+              },
+              "activity": "${SendActivity_FhPZI2()}"
+            }
+          ],
+          "actions": [
+            {
+              "$kind": "Microsoft.ContinueLoop",
+              "$designer": {
+                "id": "Hyz5F0"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "mb2n1u"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "kMjqz1"
+          },
+          "activity": "${SendActivity_DidNotUnderstand()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnEventActivity",
+      "$designer": {
+        "id": "M5yUtt"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "cXoQ0u"
+          },
+          "activity": "${SendActivity_cXoQ0u()}"
+        },
+        {
+          "$kind": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "IlGOiA"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ChoiceInput_Prompt_IlGOiA()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "choiceOptions": {
+            "includeNumbers": true
+          },
+          "property": "user.Company",
+          "style": "heroCard",
+          "choices": [
+            "Anthology",
+            "Campus Management",
+            "Talisma",
+            "Blackboard"
+          ]
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "gG5v0N"
+          },
+          "activity": "${SendActivity_gG5v0N()}"
+        },
+        {
+          "$kind": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "RMv2WK"
+          },
+          "condition": "user.Company",
+          "cases": [
+            {
+              "value": "Anthology",
+              "actions": [
+                {
+                  "$kind": "Microsoft.ChoiceInput",
+                  "$designer": {
+                    "id": "dmwfgr"
+                  },
+                  "defaultLocale": "en-us",
+                  "disabled": false,
+                  "maxTurnCount": 3,
+                  "alwaysPrompt": false,
+                  "allowInterruptions": false,
+                  "prompt": "${ChoiceInput_Prompt_dmwfgr()}",
+                  "unrecognizedPrompt": "",
+                  "invalidPrompt": "",
+                  "defaultValueResponse": "",
+                  "choiceOptions": {
+                    "includeNumbers": true,
+                    "inlineOrMore": ", or ",
+                    "inlineOr": " or ",
+                    "inlineSeparator": ", "
+                  },
+                  "property": "user.AnthologyQuestions",
+                  "style": "heroCard",
+                  "choices": [
+                    "What are the different Products of Anthology",
+                    "Who is the CEO of Anthology",
+                    "Where is the Company's Head Office situated"
+                  ]
+                },
+                {
+                  "$kind": "Microsoft.IfCondition",
+                  "$designer": {
+                    "id": "HOHzPY"
+                  },
+                  "condition": "Count(turn.recognized.answers[0].context.prompts) > 0",
+                  "actions": [
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "8QVHJo"
+                      },
+                      "property": "dialog.qnaContext",
+                      "value": "=turn.recognized.answers[0].context.prompts"
+                    },
+                    {
+                      "$kind": "Microsoft.TextInput",
+                      "$designer": {
+                        "id": "jSa7wm"
+                      },
+                      "disabled": false,
+                      "maxTurnCount": 3,
+                      "alwaysPrompt": false,
+                      "allowInterruptions": false,
+                      "prompt": "${TextInput_Prompt_jSa7wm()}",
+                      "unrecognizedPrompt": "",
+                      "invalidPrompt": "",
+                      "defaultValueResponse": "",
+                      "property": "turn.qnaMultiTurnResponse"
+                    },
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "E8lpbZ"
+                      },
+                      "property": "turn.qnaMatchFromContext",
+                      "value": "=where(dialog.qnaContext, item, item.displayText == turn.qnaMultiTurnResponse)"
+                    },
+                    {
+                      "$kind": "Microsoft.DeleteProperty",
+                      "$designer": {
+                        "id": "g96mLz"
+                      },
+                      "property": "dialog.qnaContext"
+                    },
+                    {
+                      "$kind": "Microsoft.IfCondition",
+                      "$designer": {
+                        "id": "aKTF5J"
+                      },
+                      "condition": "turn.qnaMatchFromContext && count(turn.qnaMatchFromContext) > 0",
+                      "actions": [
+                        {
+                          "$kind": "Microsoft.SetProperty",
+                          "$designer": {
+                            "id": "ZK9nxR"
+                          },
+                          "value": "=turn.qnaMatchFromContext[0].qnaId",
+                          "property": "turn.qnaIdFromPrompt"
+                        }
+                      ]
+                    }
+                  ],
+                  "elseActions": [
+                    {
+                      "$kind": "Microsoft.SendActivity",
+                      "$designer": {
+                        "id": "EUWzaR"
+                      },
+                      "activity": "${SendActivity_EUWzaR()}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "Campus Management"
+            },
+            {
+              "value": "Talisma"
+            },
+            {
+              "value": "Blackboard",
+              "actions": [
+                {
+                  "$kind": "Microsoft.ChoiceInput",
+                  "$designer": {
+                    "id": "x87ad9"
+                  },
+                  "defaultLocale": "en-us",
+                  "disabled": false,
+                  "maxTurnCount": 3,
+                  "alwaysPrompt": false,
+                  "allowInterruptions": false,
+                  "prompt": "${ChoiceInput_Prompt_x87ad9()}",
+                  "unrecognizedPrompt": "",
+                  "invalidPrompt": "",
+                  "defaultValueResponse": "",
+                  "choiceOptions": {
+                    "includeNumbers": true,
+                    "inlineOrMore": ", or "
+                  },
+                  "property": "user.AnthologyQuestions",
+                  "style": "heroCard",
+                  "choices": [
+                    "Where is the Headquarter of Blackboard Company",
+                    "When is Blackboard Company Founded"
+                  ]
+                },
+                {
+                  "$kind": "Microsoft.IfCondition",
+                  "$designer": {
+                    "id": "5m7lIr"
+                  },
+                  "condition": "Count(turn.recognized.answers[0].context.prompts) > 0",
+                  "actions": [
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "hSt8lW"
+                      },
+                      "property": "dialog.qnaContext",
+                      "value": "=turn.recognized.answers[0].context.prompts"
+                    },
+                    {
+                      "$kind": "Microsoft.TextInput",
+                      "$designer": {
+                        "id": "QIx5JF"
+                      },
+                      "disabled": false,
+                      "maxTurnCount": 3,
+                      "alwaysPrompt": false,
+                      "allowInterruptions": false,
+                      "prompt": "${TextInput_Prompt_QIx5JF()}",
+                      "unrecognizedPrompt": "",
+                      "invalidPrompt": "",
+                      "defaultValueResponse": "",
+                      "property": "turn.qnaMultiTurnResponse"
+                    },
+                    {
+                      "$kind": "Microsoft.SetProperty",
+                      "$designer": {
+                        "id": "yhgFOk"
+                      },
+                      "property": "turn.qnaMatchFromContext",
+                      "value": "=where(dialog.qnaContext, item, item.displayText == turn.qnaMultiTurnResponse)"
+                    },
+                    {
+                      "$kind": "Microsoft.DeleteProperty",
+                      "$designer": {
+                        "id": "dbic7D"
+                      },
+                      "property": "dialog.qnaContext"
+                    },
+                    {
+                      "$kind": "Microsoft.IfCondition",
+                      "$designer": {
+                        "id": "7Jh3B2"
+                      },
+                      "condition": "turn.qnaMatchFromContext && count(turn.qnaMatchFromContext) > 0",
+                      "actions": [
+                        {
+                          "$kind": "Microsoft.SetProperty",
+                          "$designer": {
+                            "id": "TNBViN"
+                          },
+                          "value": "=turn.qnaMatchFromContext[0].qnaId",
+                          "property": "turn.qnaIdFromPrompt"
+                        }
+                      ]
+                    }
+                  ],
+                  "elseActions": [
+                    {
+                      "$kind": "Microsoft.SendActivity",
+                      "$designer": {
+                        "id": "9PUwvq"
+                      },
+                      "activity": "${SendActivity_9PUwvq()}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "4Vc4HH"
+          },
+          "property": "dialog.ChannelData",
+          "value": {
+            "Channel": "skillbot"
+          }
+        },
+        {
+          "$kind": "Microsoft.EndDialog",
+          "$designer": {
+            "id": "VjzZlX"
+          }
+        }
+      ]
+    }
+  ],
+  "generator": "CoreWithQnA.lg",
+  "id": "CoreWithQnA",
+  "recognizer": "CoreWithQnA.lu.qna"
+}

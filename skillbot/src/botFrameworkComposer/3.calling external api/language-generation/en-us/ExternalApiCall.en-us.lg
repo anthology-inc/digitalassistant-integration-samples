@@ -1,0 +1,87 @@
+[import](common.lg)
+
+# SendActivity_Greeting()
+[Activity
+    Text = ${SendActivity_Greeting_text()}
+]
+
+# SendActivity_Greeting_text()
+- Welcome to your **Campus Information System**.
+- Welcome to Campus Information System
+# SendActivity_DidNotUnderstand()
+[Activity
+    Text = ${SendActivity_DidNotUnderstand_text()}
+]
+
+# SendActivity_DidNotUnderstand_text()
+- Sorry, I didn't get that.
+# herocardsActivity(dataList)
+[Activity
+    Attachments = ${heroCards(dataList)}
+    AttachmentLayout = carousel
+]
+
+
+# heroCards(dataList)
+- ${herocardTemplate(datalist, datalist, datalist, datalist)}
+
+# herocardTemplate(title, subTitle, text, buttons)
+[HeroCard
+    title = List of Campuses
+    buttons = ${foreach(buttons, x, x.Name)}
+        
+]
+# herocardTemplateList(title, subTitle, text, buttons)
+[HeroCard
+    title = List of Schools
+    buttons = ${foreach(buttons, x, x.Name)}
+        
+]
+
+# SendActivity_xcvo8Y(dataList)
+[Activity
+    Text = ${SendActivity_xcvo8Y_text()}
+    Attachments = ${heroCards(dialog.api_response.content.value)}
+    AttachmentLayout = list
+]
+
+# SendActivity_xcvo8Y_text()
+- Select from the below list
+# SendActivity_KKmI52()
+[ThumbnailCard
+    title = Campus Code is ${turn.results.content.value[0].Code}
+    text = The Campus *"${turn.activity.text}"* City is **${turn.results.content.value[0].City}** & State is  **${turn.results.content.value[0].State}**
+    image = https://crmf3.dev.campusmgmt.com:9500/src/dataservices/other/images/Anthology_Student.svg
+]
+# SendActivity_KKmI52_text()
+- ${foreach(turn.results.content.value, x, x.Id)}
+# ConfirmInput_Prompt_3rL7s1()
+[Activity
+    Text = ${ConfirmInput_Prompt_3rL7s1_text()}
+]
+
+# ConfirmInput_Prompt_3rL7s1_text()
+- Do you want to view the list of schools for ${turn.activity.text}?
+# SendActivity_1NpLvQ()
+[Activity
+    Text = ${SendActivity_1NpLvQ_text()}
+]
+
+# SendActivity_1NpLvQ_text()
+- false - ${user.confirm}
+# SendActivity_SXUU0G()
+[Activity
+    Text = ${SendActivity_SXUU0G_text()}
+]
+
+# SendActivity_SXUU0G_text()
+- ${user.response}
+# SendActivity_FEzI5o()
+[Activity
+    Text = ${SendActivity_FEzI5o_text()}
+]
+
+# SendActivity_FEzI5o_text()
+
+- ```${join(foreach(turn.results.content.value, x, `1. ` + x.Name),`
+` )}```
