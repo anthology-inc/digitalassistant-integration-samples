@@ -6,8 +6,12 @@ This bot project was created using the Empty Bot template, and contains a minima
 ### Install BotFramework Composer
 Download the [Botframework Composer](https://docs.microsoft.com/en-us/composer/install-composer?tabs=windows#download-composer)  from the microsoft website
 
-Launch the botframework composer and load the solution. This will display as below
+To load the sample code, either download the code or clone the code using your perferred tool. 
+
+Launch the botframework composer and choose "open" option to open the sample bot. In this example, select the folder renee-integration-samples/skillbot/src/botFrameworkComposer/1.simple flow/ .
+This will load the solution and will display as below
 ![](LandingPage.png)
+
 
 The red error icon shows that QnA Configuration is not been completed
 
@@ -25,7 +29,7 @@ Click next to create the azure resource. This page will display both the require
 ![](QnaConfiguration.png) 
 
 ### Working with the Sample
-The manifest file(dialogchildbot-manifest-1.0.json) is located under wwwroot\Manifest\ folder. This will be used to describe as to what skills this bot supports under the "activities" section. It describes that it supports two skill - bookFlight and CampusInformation. In this working sample, booFlight is configured to show how the Skill need to be implemented
+The manifest file(dialogchildbot-manifest-1.0.json) is located under wwwroot\Manifest\ folder. This will be used to describe as to what skills this bot supports under the "activities" section. It describes that it supports two skill - bookFlight and CampusInformation. In this working sample, bookFlight is configured to show how the Skill need to be implemented
 through botframework composer. 
 ![](bookflight.png)
 

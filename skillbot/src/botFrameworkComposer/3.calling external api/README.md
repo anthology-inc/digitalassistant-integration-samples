@@ -11,7 +11,10 @@ This sample bot contains the flow as to how to invoke an external api (in this c
 ## Install BotFramework Composer
 Download the [Botframework Composer](https://docs.microsoft.com/en-us/composer/install-composer?tabs=windows#download-composer)  from the microsoft website
 
-Launch the botframework composer and load the solution. This will display as below
+To load the sample code, either download the code or clone the code using your perferred tool. 
+
+Launch the botframework composer and choose "open" option to open the sample bot. In this example, select the folder renee-integration-samples/skillbot/src/botFrameworkComposer/3.calling external api/ .
+This will load the solution and will display as below
 ![](LandingPage.png)
 
 The red error icon shows that QnA Configuration is not been completed
